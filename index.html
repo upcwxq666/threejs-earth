@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>threejs地球</title>
+    <style>
+        body{
+            margin:0px;
+        }
+    </style>
+    <script src="./JS/three.js"></script>
+    <script src="https://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"></script>
+
+</head>
+<body>
+    <script>      
+        //设置相机的一些参数。
+        var view_angle = 45;
+        aspect = window.innerWidth / window.innerHeight;
+        near = 0.1;
+        far = 10000;
+    
+        //新建一个WebGL 渲染，以及相机
+        var renderer = new THREE.WebGLRenderer();
+        var camera =
+            new THREE.PerspectiveCamera(
+            view_angle, aspect, near, far
+            );
+        var scene = new THREE.Scene();
+    
+        //把相机添加到场景里面
+        scene.add(camera);
+    
+        camera.position.z = 10;
+    
+        renderer.setSize(window.innerWidth,window.innerHeight);
+    
+        //附加DOM元素
+        document.body.append(renderer.domElement);
+    
+        var ambientLight = new THREE.AmbientLight( 0xffffff );
+        scene.add( ambientLight );
+        //设置球体的值
+        sphere();
+        animate();
+        //sphere函数添加添加球体到场景
+        function sphere(){
+				var texture = new THREE.TextureLoader().load( './earth.jpg' );
+				var sphereGeo = new THREE.SphereGeometry(2, 50, 50);//创建球体
+				var sphereMat =new THREE.MeshPhongMaterial({
+					map: texture
+				});
+				sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);//创建球体网格模型
+				sphereMesh.position.set(0, 0, 0);//设置球的坐标
+				scene.add(sphereMesh);//将球体添加到场景
+		} 
+        //渲染
+        function animate(){
+            requestAnimationFrame(animate);
+            sphereMesh.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+        
+       
+    </script>
+</body>
+</html>
